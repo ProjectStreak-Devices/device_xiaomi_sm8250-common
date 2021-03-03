@@ -259,5 +259,12 @@ vendor.usb.use_ffs_mtp=0
 ro.config.media_vol_steps=30
 ro.config.vc_call_vol_steps=10
 
+# SoC
+ro.soc.manufacturer=Qualcomm
+ro.soc.model=SM8250
+
+# Time
+persist.timed.enable=true
+
 # WiFi
 wifi.aware.interface=wifi-aware0
