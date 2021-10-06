@@ -56,6 +56,19 @@ BiometricsFingerprint *BiometricsFingerprint::sInstance = nullptr;
 
 #define FOD_UI_PATH "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_ui"
 
+BiometricsFingerprint::BiometricsFingerprint() : mClientCallback(nullptr), mDevice(nullptr) {
+    sInstance = this; // keep track of the most recent instance
+    for (const auto& class_name : kHALClasses) {
+        mDevice = openHal(class_name);
+        if (!mDevice) {
+            ALOGE("Can't open HAL module, class %s", class_name);
+        } else {
+            ALOGI("Opened fingerprint HAL, class %s", class_name);
+            break;
+        }
+    }
+
+#ifdef FOD
 static bool readBool(int fd) {
     char c;
     int rc;
@@ -75,19 +88,6 @@ static bool readBool(int fd) {
     return c != '0';
 }
 
-BiometricsFingerprint::BiometricsFingerprint() : mClientCallback(nullptr), mDevice(nullptr) {
-    sInstance = this; // keep track of the most recent instance
-    for (const auto& class_name : kHALClasses) {
-        mDevice = openHal(class_name);
-        if (!mDevice) {
-            ALOGE("Can't open HAL module, class %s", class_name);
-        } else {
-            ALOGI("Opened fingerprint HAL, class %s", class_name);
-            break;
-        }
-    }
-
-#ifdef FOD
     std::thread([this]() {
         int fd = open(FOD_UI_PATH, O_RDONLY);
         if (fd < 0) {
