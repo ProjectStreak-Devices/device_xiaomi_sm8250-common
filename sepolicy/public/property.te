@@ -1,6 +1,6 @@
 # IMEI
-type deviceid_prop, property_type;
+vendor_public_prop(deviceid_prop)
 
-type vendor_fp_prop, property_type;
+vendor_public_prop(vendor_fp_prop)
 
-type vendor_motor_prop, property_type;
+vendor_public_prop(vendor_motor_prop)
